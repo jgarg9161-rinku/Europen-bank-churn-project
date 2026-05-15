@@ -303,18 +303,18 @@ def user_input_features():
     engagement_score = st.sidebar.slider("Engagement Score", 0.0, 10.0, 5.0)
 
     summary = {
-        "Geography": geography,
-        "Gender": gender,
-        "CreditScore": credit_score,
-        "Age": age,
-        "Tenure": tenure,
-        "Balance": balance,
-        "NumOfProducts": num_products,
-        "HasCrCard": has_crcard,
-        "IsActiveMember": is_active,
-        "EstimatedSalary": estimated_salary,
-        "EngagementScore": engagement_score,
-    }
+    'Geography': geography,
+    'Gender': gender,
+    'CreditScore': credit_score,
+    'Age': age,
+    'Tenure': tenure,
+    'Balance': balance,
+    'NumOfProducts': num_products,
+    'HasCrCard': has_crcard,
+    'IsActiveMember': is_active,
+    'EstimatedSalary': estimated_salary,
+    'Engagement Score': engagement_score
+}
 
     model_input_df = build_model_input(
         geography,
@@ -444,8 +444,13 @@ with tab2:
         st.metric("Account Tier", balance_tier, f"${balance:,.0f}")
 
     with col3:
-        engagement_level = "High" if summary_df['Engagement Score'][0] > 7 else "Medium" if summary_df['Engagement Score'][0] > 4 else "Low"
-        st.metric("Engagement", engagement_level, f"{summary_df['Engagement Score'][0]}/10")
+    eng_score = summary_df['Engagement Score'][0]
+
+engagement_level = (
+    "High" if eng_score > 7
+    else "Medium" if eng_score > 4
+    else "Low"
+)  
 
     with col4:
         loyalty_score = min(100, (tenure * 10) + (products * 15) + (1 if summary_df['IsActiveMember'][0] else 0) * 20)
