@@ -261,11 +261,9 @@ def build_model_input(
         'Scaled Tenure': tenure / 10,
         'Scaled Balance': balance / 250000,
     }
-
-    return pd.DataFrame([row])
+ return pd.DataFrame([row])
  
-
-    # Geography encoding
+# Geography encoding
     row['France'] = 1 if geography == 'France' else 0
     row['Germany'] = 1 if geography == 'Germany' else 0
     row['Spain'] = 1 if geography == 'Spain' else 0
