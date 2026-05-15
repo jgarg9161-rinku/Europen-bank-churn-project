@@ -220,8 +220,7 @@ def build_model_input(
     estimated_salary,
     engagement_score,
 ):
-   row = {}
-data = np.array([[f1, f2, f3, f4, f5, f6, f7,f8, f9, f10, f11, f12, f13, f14]])
+    row = {}
     if 'France' in row:
     row['France'] = 1 if geography == 'France' else 0
     if 'Spain ' in row:
