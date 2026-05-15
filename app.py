@@ -220,13 +220,15 @@ def build_model_input(
     estimated_salary,
     engagement_score,
 ):
-  # Create input row
-row = {}
+ def prepare_input():
+    row = {}
 
-# Geography encoding
-row['France'] = 1 if geography == 'France' else 0
-row['Germany'] = 1 if geography == 'Germany' else 0
-row['Spain'] = 1 if geography == 'Spain' else 0
+    # Geography encoding
+    row['France'] = 1 if geography == 'France' else 0
+    row['Germany'] = 1 if geography == 'Germany' else 0
+    row['Spain'] = 1 if geography == 'Spain' else 0
+
+    return row
     if 'Male' in row:
         row['Male'] = 1
       if gender == 'Male' else 0
