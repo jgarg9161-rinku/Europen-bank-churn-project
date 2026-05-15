@@ -1,18 +1,28 @@
 import streamlit as st
-import pandas as pd  
-from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-from datetime import datetime
-import random
                                                                                                                                                                                                                                                                                                           
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
 
+# Load dataset
+df = pd.read_csv("Training.csv")
 
-# This loads your specific file
-model = joblib.load('random_forest_model_compressed.pkl')
-MODEL_FEATURES = list(getattr(model, 'feature_names_in_', []))
+# Clean data
+for col in df.columns:
+    df[col] = df[col].astype(str).str.replace('%', '')
 
+df = df.apply(pd.to_numeric, errors='coerce')
+df.fillna(0, inplace=True)
+
+# Train model
+y = df.iloc[:, 0]
+X = df.iloc[:, 1:15]
+
+model = RandomForestClassifier()
+model.fit(X, y)
 # 1. Page Configuration
 st.set_page_config(
     page_title="Bank Churn Predictor Pro",
