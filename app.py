@@ -227,7 +227,6 @@ def _parse_numeric_bin(col_name: str, prefix: str):
     except ValueError:
         return None
 
-
 def _set_closest_bin(prefix: str, value: float, row: dict):
     candidates = [c for c in MODEL_FEATURES if c.startswith(prefix)]
     if not candidates or value is None:
@@ -257,7 +256,6 @@ def build_model_input(
     engagement_score,
 ):
 
-    # line ~257
     row = {
         'CreditScore': credit_score,
         'Age': age,
@@ -269,35 +267,38 @@ def build_model_input(
         'EstimatedSalary': estimated_salary
     }
 
-    # line ~269
+    # Geography encoding
     row['France'] = 1 if geography == 'France' else 0
     row['Germany'] = 1 if geography == 'Germany' else 0
     row['Spain'] = 1 if geography == 'Spain' else 0
 
-    # line ~275
+    # Gender encoding
     row['Male'] = 1 if gender == 'Male' else 0
 
-    # line ~278
+    # Derived feature
     b_s_ratio = balance / (estimated_salary + 1)
 
     row['BalanceToSalaryRatio'] = b_s_ratio
     row['EngagementScore'] = engagement_score
 
-    # line ~284
     return pd.DataFrame([row])
-# INPUTS
-credit_score = st.number_input("Credit Score")
-age = st.number_input("Age")
-tenure = st.number_input("Tenure")
-balance = st.number_input("Balance")
-num_products = st.number_input("Num Products")
-has_crcard = st.selectbox("Has Credit Card", [0, 1])
-is_active = st.selectbox("Is Active", [0, 1])
-estimated_salary = st.number_input("Salary")
-engagement_score = st.slider("Engagement Score", 0.0, 10.0)
 
-geography = st.selectbox("Geography", ["France", "Germany", "Spain"])
-gender = st.selectbox("Gender", ["Male", "Female"])
+st.sidebar.header("User Input Features")
+
+geography = st.sidebar.selectbox("Geography", ["France", "Germany", "Spain"])
+gender = st.sidebar.selectbox("Gender", ["Male", "Female"])
+
+credit_score = st.sidebar.number_input("Credit Score", 300, 850, 600)
+age = st.sidebar.slider("Age", 18, 100, 35)
+tenure = st.sidebar.slider("Tenure (Years)", 0, 10, 5)
+balance = st.sidebar.number_input("Balance", 0.0, 250000.0, 75000.0)
+
+num_products = st.sidebar.selectbox("Number of Products", [1, 2, 3, 4])
+has_crcard = st.sidebar.selectbox("Has Credit Card?", [1, 0])
+is_active = st.sidebar.selectbox("Is Active Member?", [1, 0])
+
+estimated_salary = st.sidebar.number_input("Estimated Salary", 0.0, 200000.0, 75000.0)
+engagement_score = st.sidebar.slider("Customer Engagement Score", 0.0, 10.0, 5.0)
 
 if st.button("Predict"):
 
@@ -318,95 +319,6 @@ if st.button("Predict"):
     prediction = model.predict(model_input_df)
 
     st.write("Prediction:", prediction)
-  
-    # Basic features (MUST MATCH TRAINING)
- def build_model_input(
-    geography,
-    gender,
-    credit_score,
-    age,
-    tenure,
-    balance,
-    num_products,
-    has_crcard,
-    is_active,
-    estimated_salary,
-    engagement_score,
-):
-
-    # Basic features
-    row = {
-        'CreditScore': credit_score,
-        'Age': age,
-        'Tenure': tenure,
-        'Balance': balance,
-        'NumOfProducts': num_products,
-        'HasCrCard': has_crcard,
-        'IsActiveMember': is_active,
-        'EstimatedSalary': estimated_salary
-    }
-
-    # Geography encoding
-    row['France'] = 1 if geography == 'France' else 0
-    row['Germany'] = 1 if geography == 'Germany' else 0
-    row['Spain'] = 1 if geography == 'Spain' else 0
-
-    # Gender encoding
-    row['Male'] = 1 if gender == 'Male' else 0
-
-    # Derived features
-    b_s_ratio = balance / (estimated_salary + 1)
-
-    row['BalanceToSalaryRatio'] = b_s_ratio
-    row['EngagementScore'] = engagement_score
-
-    return pd.DataFrame([row])
-
-
-def user_input_features():
-    st.sidebar.header("User Input Features")
-
-    geography = st.sidebar.selectbox("Geography", options=("France", "Germany", "Spain"))
-    gender = st.sidebar.selectbox("Gender", options=("Male", "Female"))
-    credit_score = st.sidebar.number_input("Credit Score", 300, 850, 600)
-    age = st.sidebar.slider("Age", 18, 100, 35)
-    tenure = st.sidebar.slider("Tenure (Years)", 0, 10, 5)
-    balance = st.sidebar.number_input("Balance", 0.0, 250000.0, 75000.0)
-    num_products = st.sidebar.selectbox("Number of Products", options=(1, 2, 3, 4))
-    has_crcard = st.sidebar.selectbox("Has Credit Card?", options=(1, 0))
-    is_active = st.sidebar.selectbox("Is Active Member?", options=(1, 0))
-    estimated_salary = st.sidebar.number_input("Estimated Salary", 0.0, 200000.0, 75000.0)
-    engagement_score = st.sidebar.slider("Customer Engagement Score", 0.0, 10.0, 5.0)
-
-    summary = {
-        'Geography': geography,
-        'Gender': gender,
-        'CreditScore': credit_score,
-        'Age': age,
-        'Tenure': tenure,
-        'Balance': balance,
-        'NumOfProducts': num_products,
-        'HasCrCard': has_crcard,
-        'IsActiveMember': is_active,
-        'EstimatedSalary': estimated_salary,
-        'Engagement Score': engagement_score,
-    }
-
-    model_input = build_model_input(
-        geography,
-        gender,
-        credit_score,
-        age,
-        tenure,
-        balance,
-        num_products,
-        has_crcard,
-        is_active,
-        estimated_salary,
-        engagement_score,
-    )
-
-    return pd.DataFrame(summary, index=[0]), pd.DataFrame([model_input]), geography, gender
 # --- 2. Execution ---
 summary_df, model_input_df, geo_val, gen_val = user_input_features()
 
