@@ -649,8 +649,7 @@ with col_img1:
 with col_img2:
     st.subheader("Model Performance Metrics")
     # Matching your filename: download (1).png
-    st.image("./download (1).png", caption="Confusion Matrix / Accuracy Metrics", use_container_width=True)
-
+  st.image("performance.png", caption="Confusion Matrix / Accuracy Metrics", use_container_width=True)
 # Optional: SHAP explanation in an expander for a professional touch
 with st.expander("ℹ️ What do these charts mean?"):
     st.write("""
