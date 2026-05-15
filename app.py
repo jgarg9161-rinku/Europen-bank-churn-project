@@ -231,7 +231,7 @@ def build_model_input(
     return row
     if 'Male' in row:
         row['Male'] = 1
-      if gender == 'Male' else 0
+     row['Male'] = 1 if gender == 'Male' else 0
 
     if 'CreditScore' in row:
         row['CreditScore'] = credit_score
