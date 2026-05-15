@@ -243,7 +243,7 @@ def _set_closest_bin(prefix: str, value: float, row: dict):
         if _parse_numeric_bin(candidate, prefix) == best_value:
             row[candidate] = 1
 
- def build_model_input(...):
+def build_model_input(
     geography,
     gender,
     credit_score,
@@ -257,6 +257,7 @@ def _set_closest_bin(prefix: str, value: float, row: dict):
     engagement_score,
 ):
 
+    # line ~257
     row = {
         'CreditScore': credit_score,
         'Age': age,
@@ -268,20 +269,21 @@ def _set_closest_bin(prefix: str, value: float, row: dict):
         'EstimatedSalary': estimated_salary
     }
 
-    # Geography encoding
+    # line ~269
     row['France'] = 1 if geography == 'France' else 0
     row['Germany'] = 1 if geography == 'Germany' else 0
     row['Spain'] = 1 if geography == 'Spain' else 0
 
-    # Gender encoding
+    # line ~275
     row['Male'] = 1 if gender == 'Male' else 0
 
-    # Derived features
+    # line ~278
     b_s_ratio = balance / (estimated_salary + 1)
 
-    row['BalanceSalaryRatio'] = b_s_ratio
+    row['BalanceToSalaryRatio'] = b_s_ratio
     row['EngagementScore'] = engagement_score
 
+    # line ~284
     return pd.DataFrame([row])
 # INPUTS
 credit_score = st.number_input("Credit Score")
@@ -316,6 +318,7 @@ if st.button("Predict"):
     prediction = model.predict(model_input_df)
 
     st.write("Prediction:", prediction)
+  
     # Basic features (MUST MATCH TRAINING)
  def build_model_input(...):
     geography,
