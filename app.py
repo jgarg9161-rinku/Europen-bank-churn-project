@@ -18,8 +18,11 @@ df = df.apply(pd.to_numeric, errors='coerce')
 df.fillna(0, inplace=True)
 
 # Train model
+X = df[['CreditScore','Age','Tenure','Balance',
+        'NumOfProducts','HasCrCard',
+        'IsActiveMember','EstimatedSalary']]
+
 y = df.iloc[:, 0]
-X = df.iloc[:, 1:15]
 
 model = RandomForestClassifier()
 model.fit(X, y)
@@ -220,16 +223,19 @@ def build_model_input(
     estimated_salary,
     engagement_score,
 ):
-    row = {
-        'CreditScore': credit_score,
-        'Age': age,
-        'Tenure': tenure,
-        'Balance': balance,
-        'NumOfProducts': num_products,
-        'HasCrCard': has_crcard,
-        'IsActiveMember': is_active,
-        'EstimatedSalary': estimated_salary
-    }
+    row = {}
+
+    # Basic features (MUST MATCH TRAINING)
+    row['CreditScore'] = credit_score
+    row['Age'] = age
+    row['Tenure'] = tenure
+    row['Balance'] = balance
+    row['NumOfProducts'] = num_products
+    row['HasCrCard'] = has_crcard
+    row['IsActiveMember'] = is_active
+    row['EstimatedSalary'] = estimated_salary
+
+    return row
 
     # Geography encoding
     row['France'] = 1 if geography == 'France' else 0
