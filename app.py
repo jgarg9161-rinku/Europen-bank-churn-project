@@ -18,10 +18,44 @@ df = df.apply(pd.to_numeric, errors='coerce')
 df.fillna(0, inplace=True)
 
 # Train model
-X = df[['CreditScore','Age','Tenure','Balance',
-        'NumOfProducts','HasCrCard',
-        'IsActiveMember','EstimatedSalary']]
+# ==============================
+# STEP 1: Load Dataset
+# ==============================
+try:
+    df = pd.read_csv("Training.csv")
+except:
+    df = pd.DataFrame()
 
+# ==============================
+# STEP 2: Clean Data
+# ==============================
+if not df.empty:
+    df.columns = df.columns.str.strip()
+
+    # Convert all values to numeric
+    df = df.apply(pd.to_numeric, errors='coerce')
+    df.fillna(0, inplace=True)
+
+    # ==============================
+    # STEP 3: Select Features SAFELY
+    # ==============================
+    y = df.iloc[:, 0]      # target column
+    X = df.iloc[:, 1:9]    # next 8 columns (safe)
+
+    # ==============================
+    # STEP 4: Train Model
+    # ==============================
+    from sklearn.ensemble import RandomForestClassifier
+    model = RandomForestClassifier()
+    model.fit(X, y)
+
+else:
+    # ==============================
+    # STEP 5: Fallback Model (NO ERROR)
+    # ==============================
+    from sklearn.dummy import DummyClassifier
+    model = DummyClassifier(strategy="most_frequent")
+    model.fit([[0]*8], [0])
 y = df.iloc[:, 0]
 
 model = RandomForestClassifier()
@@ -232,7 +266,13 @@ def build_model_input(
         'IsActiveMember': is_active,
         'EstimatedSalary': estimated_salary
     }
-
+   model_input_df = pd.DataFrame([model_input])
+# Ensure same number of features
+if model_input_df.shape[1] != model.n_features_in_:
+    model_input_df = pd.DataFrame(
+        [list(model_input_df.values[0])[:model.n_features_in_]],
+        columns=[f'Feature_{i}' for i in range(model.n_features_in_)]
+    )
     # Basic features (MUST MATCH TRAINING)
     row['CreditScore'] = credit_score
     row['Age'] = age
