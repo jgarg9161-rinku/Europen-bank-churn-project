@@ -665,11 +665,11 @@ col_img1, col_img2 = st.columns(2)
 
 with col_img1:
     st.subheader("Feature Importance")
-    st.image("shap.png", use_container_width=True)
+    st.image("shap.png", caption="Impact of features on prediction", use_container_width=True)
 
 with col_img2:
     st.subheader("Model Performance Metrics")
-    st.image("performance.png", use_container_width=True)
+st.image("performance.png", caption="Confusion Matrix / Accuracy Metrics", use_container_width=True)
 # Optional: SHAP explanation in an expander for a professional touch
 with st.expander("ℹ️ What do these charts mean?"):
     st.write("""
