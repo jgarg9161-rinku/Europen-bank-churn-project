@@ -256,25 +256,20 @@ def build_model_input(
     engagement_score,
 ):
 
-    row = {}
+    row = {
+        # ✔️ MUST MATCH TRAINING FEATURES
+        'Scaled Score': credit_score / 850,
+        'Scaled Age': age / 100,
+        'Scaled Balance': balance / 250000,
+        'Scaled Tenure': tenure / 10,
 
-    # ✔️ SAFE VERSION: use EXACT column style most datasets use
+        # ✔️ CATEGORICAL FEATURES (MATCH EXACT TRAINING NAMES)
+        'France': 1 if geography == 'France' else 0,
+        'Germany': 1 if geography == 'Germany' else 0,
+        'Spain': 1 if geography == 'Spain' else 0,
 
-    row['CreditScore'] = credit_score
-    row['Age'] = age
-    row['Tenure'] = tenure
-    row['Balance'] = balance
-    row['NumOfProducts'] = num_products
-    row['HasCrCard'] = has_crcard
-    row['IsActiveMember'] = is_active
-    row['EstimatedSalary'] = estimated_salary
-
-    # ✔️ ONE HOT ENCODING (SAFE FORMAT)
-    row['Geography_France'] = 1 if geography == 'France' else 0
-    row['Geography_Germany'] = 1 if geography == 'Germany' else 0
-    row['Geography_Spain'] = 1 if geography == 'Spain' else 0
-
-    row['Gender_Male'] = 1 if gender == 'Male' else 0
+        'Male': 1 if gender == 'Male' else 0,
+    }
 
     return pd.DataFrame([row])
 
