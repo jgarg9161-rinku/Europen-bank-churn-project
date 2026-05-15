@@ -220,8 +220,7 @@ def build_model_input(
     estimated_salary,
     engagement_score,
 ):
- def prepare_input():
- row = {
+    row = {
         'CreditScore': credit_score,
         'Age': age,
         'Tenure': tenure,
@@ -232,15 +231,15 @@ def build_model_input(
         'EstimatedSalary': estimated_salary
     }
 
-
     # Geography encoding
     row['France'] = 1 if geography == 'France' else 0
     row['Germany'] = 1 if geography == 'Germany' else 0
     row['Spain'] = 1 if geography == 'Spain' else 0
 
-    # Gender
+    # Gender encoding
     row['Male'] = 1 if gender == 'Male' else 0
 
+    return row
     # Numeric values
     row['CreditScore'] = credit_score
     row['Age'] = age
