@@ -266,13 +266,26 @@ def build_model_input(
         'IsActiveMember': is_active,
         'EstimatedSalary': estimated_salary
     }
-   model_input_df = pd.DataFrame([model_input])
-# Ensure same number of features
-if model_input_df.shape[1] != model.n_features_in_:
-    model_input_df = pd.DataFrame(
-        [list(model_input_df.values[0])[:model.n_features_in_]],
-        columns=[f'Feature_{i}' for i in range(model.n_features_in_)]
-    )
+# INPUT SECTION (above)
+credit_score = st.number_input("Credit Score")
+age = st.number_input("Age")
+tenure = st.number_input("Tenure")
+balance = st.number_input("Balance")
+
+# 🔽 THIS IS YOUR BLOCK (around line ~260-275)
+if st.button("Predict"):
+    model_input = {
+        "CreditScore": credit_score,
+        "Age": age,
+        "Tenure": tenure,
+        "Balance": balance
+    }
+
+    model_input_df = pd.DataFrame([model_input])
+
+    prediction = model.predict(model_input_df)
+
+    st.write("Prediction:", prediction)
     # Basic features (MUST MATCH TRAINING)
     row['CreditScore'] = credit_score
     row['Age'] = age
