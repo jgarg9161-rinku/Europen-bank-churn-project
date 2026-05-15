@@ -296,7 +296,7 @@ if st.button("Predict"):
     row['IsActiveMember'] = is_active
     row['EstimatedSalary'] = estimated_salary
 
-  def something():
+ 
     row = df.iloc[0]
     return row
 
