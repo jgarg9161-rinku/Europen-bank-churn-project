@@ -296,7 +296,8 @@ if st.button("Predict"):
     row['IsActiveMember'] = is_active
     row['EstimatedSalary'] = estimated_salary
 
-    return row
+   def something():
+   st.write(row)
 
     # Geography encoding
     row['France'] = 1 if geography == 'France' else 0
