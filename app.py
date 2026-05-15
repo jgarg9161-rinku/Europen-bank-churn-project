@@ -443,18 +443,18 @@ with tab2:
         balance_tier = "VIP" if balance > 150000 else "Premium" if balance > 100000 else "Standard" if balance > 25000 else "Basic"
         st.metric("Account Tier", balance_tier, f"${balance:,.0f}")
 
-  with st.container():
+with st.container():
 
     eng_score = summary_df.iloc[0]['Engagement Score']
 
-    engagement_level = (
-        "High" if eng_score > 7
-        else "Medium" if eng_score > 4
-        else "Low"
-    )
+    if eng_score > 7:
+        engagement_level = "High"
+    elif eng_score > 4:
+        engagement_level = "Medium"
+    else:
+        engagement_level = "Low"
 
     st.write("Engagement Level:", engagement_level)
-
     with col4:
         loyalty_score = min(100, (tenure * 10) + (products * 15) + (1 if summary_df['IsActiveMember'][0] else 0) * 20)
         st.metric("Loyalty Score", f"{loyalty_score}%", f"{tenure} yrs tenure")
