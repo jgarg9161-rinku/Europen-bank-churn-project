@@ -228,19 +228,21 @@ def build_model_input(
     row['Germany'] = 1 if geography == 'Germany' else 0
     row['Spain'] = 1 if geography == 'Spain' else 0
 
-    return row
-    if 'Male' in row:
-        row['Male'] = 1
-     row['Male'] = 1 if gender == 'Male' else 0
+    # Gender
+    row['Male'] = 1 if gender == 'Male' else 0
 
-    if 'CreditScore' in row:
-        row['CreditScore'] = credit_score
-    if 'NumOfProducts' in row:
-        row['NumOfProducts'] = num_products
-    if 'Product to tenure Ratio ' in row:
-        row['Product to tenure Ratio '] = num_products / (tenure + 1)
-    if 'Age Tenure' in row:
-        row['Age Tenure'] = age * tenure
+    # Numeric values
+    row['CreditScore'] = credit_score
+    row['Age'] = age
+    row['Tenure'] = tenure
+    row['Balance'] = balance
+    row['NumOfProducts'] = num_products
+    row['HasCrCard'] = has_crcard
+    row['IsActiveMember'] = is_active
+    row['EstimatedSalary'] = salary
+
+    return pd.DataFrame([row])
+  
 
     b_s_ratio = balance / (estimated_salary + 1)
     scaled_score = credit_score / 850
