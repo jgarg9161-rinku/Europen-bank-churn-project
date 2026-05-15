@@ -222,11 +222,16 @@ def build_model_input(
 ):
     row = {}
     if 'France' in row:
-    row['France'] = 1 if geography == 'France' else 0
+   if geography == 'France':
+    row['France'] = 1
+else:
+    row['France'] = 0
     if 'Spain ' in row:
-        row['Spain '] = 1 if geography == 'Spain' else 0
+        row['Spain '] = 1 
+      if geography == 'Spain' else 0
     if 'Male' in row:
-        row['Male'] = 1 if gender == 'Male' else 0
+        row['Male'] = 1
+      if gender == 'Male' else 0
 
     if 'CreditScore' in row:
         row['CreditScore'] = credit_score
