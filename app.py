@@ -243,7 +243,7 @@ def _set_closest_bin(prefix: str, value: float, row: dict):
         if _parse_numeric_bin(candidate, prefix) == best_value:
             row[candidate] = 1
 
-  def build_model_input(
+ def build_model_input(...):
     geography,
     gender,
     credit_score,
@@ -317,7 +317,7 @@ if st.button("Predict"):
 
     st.write("Prediction:", prediction)
     # Basic features (MUST MATCH TRAINING)
-  def build_model_input(
+ def build_model_input(...):
     geography,
     gender,
     credit_score,
