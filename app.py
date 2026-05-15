@@ -1,14 +1,16 @@
 import streamlit as st
 import pandas as pd  
-import pickle                                                                                                                                                                                                                                                                                                                 
+from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 import random
+                                                                                                                                                                                                                                                                                                          
+
 
 # This loads your specific file
-model = pickle.load(open('model.pkl', 'rb'))
+model = joblib.load('random_forest_model_compressed.pkl')
 MODEL_FEATURES = list(getattr(model, 'feature_names_in_', []))
 
 # 1. Page Configuration
