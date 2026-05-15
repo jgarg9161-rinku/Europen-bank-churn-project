@@ -221,7 +221,17 @@ def build_model_input(
     engagement_score,
 ):
  def prepare_input():
-    row = {}
+ row = {
+        'CreditScore': credit_score,
+        'Age': age,
+        'Tenure': tenure,
+        'Balance': balance,
+        'NumOfProducts': num_products,
+        'HasCrCard': has_crcard,
+        'IsActiveMember': is_active,
+        'EstimatedSalary': estimated_salary
+    }
+
 
     # Geography encoding
     row['France'] = 1 if geography == 'France' else 0
