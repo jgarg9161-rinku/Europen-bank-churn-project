@@ -209,7 +209,6 @@ def _set_closest_bin(prefix: str, value: float, row: dict):
         if _parse_numeric_bin(candidate, prefix) == best_value:
             row[candidate] = 1
 
-
 def build_model_input(
     geography,
     gender,
@@ -223,7 +222,16 @@ def build_model_input(
     estimated_salary,
     engagement_score,
 ):
-    row = {}
+    return {
+        'CreditScore': credit_score,
+        'Age': age,
+        'Tenure': tenure,
+        'Balance': balance,
+        'NumOfProducts': num_products,
+        'HasCrCard': has_crcard,
+        'IsActiveMember': is_active,
+        'EstimatedSalary': estimated_salary
+    }
 
     # Basic features (MUST MATCH TRAINING)
     row['CreditScore'] = credit_score
