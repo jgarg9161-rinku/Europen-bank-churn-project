@@ -666,4 +666,4 @@ st.markdown("""
     <p>🏦 Bank Customer Churn Intelligence Pro | Powered by Machine Learning</p>
     <p>Built with ❤️ using Streamlit</p>
 </div>
-""", unsafe_allow_html=True)    correct that all code
+""", unsafe_allow_html=True)   
