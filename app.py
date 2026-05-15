@@ -320,7 +320,7 @@ if st.button("Predict"):
     st.write("Prediction:", prediction)
   
     # Basic features (MUST MATCH TRAINING)
- def build_model_input(...):
+ def build_model_input(
     geography,
     gender,
     credit_score,
