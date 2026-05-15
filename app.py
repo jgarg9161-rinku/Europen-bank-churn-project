@@ -638,14 +638,11 @@ with tab4:
 st.markdown("---")
 st.header("📊 Model Analysis & Insights")
 
-# Using columns for the first two charts
 col_img1, col_img2 = st.columns(2)
 
 with col_img1:
     st.subheader("Feature Importance")
-    # Matching your filename: shap.png
-    st.image("./shap.png", caption="Impact of features on prediction", use_container_width=True)
-
+    st.image("shap.png", caption="Impact of features on prediction", use_container_width=True)
 with col_img2:
     st.subheader("Model Performance Metrics")
   st.image("performance.png", caption="Confusion Matrix / Accuracy Metrics", use_container_width=True)
