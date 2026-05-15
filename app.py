@@ -283,23 +283,54 @@ def build_model_input(
 
     return pd.DataFrame([row])
 
-st.sidebar.header("User Input Features")
+def user_input_features():
 
-geography = st.sidebar.selectbox("Geography", ["France", "Germany", "Spain"])
-gender = st.sidebar.selectbox("Gender", ["Male", "Female"])
+    st.sidebar.header("User Input Features")
 
-credit_score = st.sidebar.number_input("Credit Score", 300, 850, 600)
-age = st.sidebar.slider("Age", 18, 100, 35)
-tenure = st.sidebar.slider("Tenure (Years)", 0, 10, 5)
-balance = st.sidebar.number_input("Balance", 0.0, 250000.0, 75000.0)
+    geography = st.sidebar.selectbox("Geography", ["France", "Germany", "Spain"])
+    gender = st.sidebar.selectbox("Gender", ["Male", "Female"])
 
-num_products = st.sidebar.selectbox("Number of Products", [1, 2, 3, 4])
-has_crcard = st.sidebar.selectbox("Has Credit Card?", [1, 0])
-is_active = st.sidebar.selectbox("Is Active Member?", [1, 0])
+    credit_score = st.sidebar.number_input("Credit Score", 300, 850, 600)
+    age = st.sidebar.slider("Age", 18, 100, 35)
+    tenure = st.sidebar.slider("Tenure (Years)", 0, 10, 5)
+    balance = st.sidebar.number_input("Balance", 0.0, 250000.0, 75000.0)
 
-estimated_salary = st.sidebar.number_input("Estimated Salary", 0.0, 200000.0, 75000.0)
-engagement_score = st.sidebar.slider("Customer Engagement Score", 0.0, 10.0, 5.0)
+    num_products = st.sidebar.selectbox("Number of Products", [1, 2, 3, 4])
+    has_crcard = st.sidebar.selectbox("Has Credit Card?", [1, 0])
+    is_active = st.sidebar.selectbox("Is Active Member?", [1, 0])
 
+    estimated_salary = st.sidebar.number_input("Estimated Salary", 0.0, 200000.0, 75000.0)
+    engagement_score = st.sidebar.slider("Engagement Score", 0.0, 10.0, 5.0)
+
+    summary = {
+        "Geography": geography,
+        "Gender": gender,
+        "CreditScore": credit_score,
+        "Age": age,
+        "Tenure": tenure,
+        "Balance": balance,
+        "NumOfProducts": num_products,
+        "HasCrCard": has_crcard,
+        "IsActiveMember": is_active,
+        "EstimatedSalary": estimated_salary,
+        "EngagementScore": engagement_score,
+    }
+
+    model_input_df = build_model_input(
+        geography,
+        gender,
+        credit_score,
+        age,
+        tenure,
+        balance,
+        num_products,
+        has_crcard,
+        is_active,
+        estimated_salary,
+        engagement_score,
+    )
+
+    return pd.DataFrame([summary]), model_input_df, geography, gender
 if st.button("Predict"):
 
     model_input_df = build_model_input(
