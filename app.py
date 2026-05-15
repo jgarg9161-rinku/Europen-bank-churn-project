@@ -256,29 +256,7 @@ def build_model_input(
     engagement_score,
 ):
 
-    # ✔️ THESE MUST MATCH TRAINING DATA (IMPORTANT)
-    row = {
-        'CreditScore': credit_score,
-        'Age': age,
-        'Tenure': tenure,
-        'Balance': balance,
-        'NumOfProducts': num_products,
-        'HasCrCard': has_crcard,
-        'IsActiveMember': is_active,
-        'EstimatedSalary': estimated_salary
-    }
-
-    # ✔️ Geography encoding (MATCH TRAINING EXACT SPELLING)
-    row['Geography_France'] = 1 if geography == 'France' else 0
-    row['Geography_Germany'] = 1 if geography == 'Germany' else 0
-    row['Geography_Spain'] = 1 if geography == 'Spain' else 0
-
-    # ✔️ Gender encoding
-    row['Gender_Male'] = 1 if gender == 'Male' else 0
-
-    return pd.DataFrame([row])
-
-    # Base scaled features (MATCH TRAINING)
+    # ✔️ MATCH TRAINING EXACTLY
     row = {
         'Scaled Score': credit_score / 850,
         'Scaled Age': age / 100,
@@ -286,12 +264,12 @@ def build_model_input(
         'Scaled Balance': balance / 250000
     }
 
-    # Geography encoding
+    # ✔️ ONE-HOT ENCODING (MATCH TRAINING NAMES EXACTLY)
     row['France'] = 1 if geography == 'France' else 0
     row['Germany'] = 1 if geography == 'Germany' else 0
     row['Spain'] = 1 if geography == 'Spain' else 0
 
-    # Gender encoding
+    # ✔️ GENDER (MATCH TRAINING)
     row['Male'] = 1 if gender == 'Male' else 0
 
     return pd.DataFrame([row])
@@ -352,9 +330,8 @@ def user_input_features():
     )
 
     return pd.DataFrame([summary]), model_input_df, geography, gender
-if st.button("Predict"):
 
- if st.button("Predict"):
+if st.button("Predict"):
 
     model_input_df = build_model_input(
         geography,
@@ -373,6 +350,9 @@ if st.button("Predict"):
     prediction = model.predict(model_input_df)
 
     st.write("Prediction:", prediction)
+
+
+ 
 # --- 2. Execution ---
 summary_df, model_input_df, geo_val, gen_val = user_input_features()
 
