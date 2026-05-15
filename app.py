@@ -255,21 +255,24 @@ def build_model_input(
     estimated_salary,
     engagement_score,
 ):
- row = {
+
+    # Base scaled features (MATCH TRAINING)
+    row = {
         'Scaled Score': credit_score / 850,
         'Scaled Age': age / 100,
         'Scaled Tenure': tenure / 10,
-        'Scaled Balance': balance / 250000,
+        'Scaled Balance': balance / 250000
     }
- return pd.DataFrame([row])
- 
-# Geography encoding
+
+    # Geography encoding
     row['France'] = 1 if geography == 'France' else 0
     row['Germany'] = 1 if geography == 'Germany' else 0
     row['Spain'] = 1 if geography == 'Spain' else 0
 
     # Gender encoding
     row['Male'] = 1 if gender == 'Male' else 0
+
+    return pd.DataFrame([row])
 
     # Derived feature
     b_s_ratio = balance / (estimated_salary + 1)
