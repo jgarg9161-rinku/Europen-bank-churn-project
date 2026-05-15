@@ -243,7 +243,7 @@ def _set_closest_bin(prefix: str, value: float, row: dict):
         if _parse_numeric_bin(candidate, prefix) == best_value:
             row[candidate] = 1
 
-def build_model_input(
+  def build_model_input(
     geography,
     gender,
     credit_score,
@@ -256,7 +256,8 @@ def build_model_input(
     estimated_salary,
     engagement_score,
 ):
-    return {
+
+    row = {
         'CreditScore': credit_score,
         'Age': age,
         'Tenure': tenure,
@@ -266,39 +267,6 @@ def build_model_input(
         'IsActiveMember': is_active,
         'EstimatedSalary': estimated_salary
     }
-# INPUT SECTION (above)
-credit_score = st.number_input("Credit Score")
-age = st.number_input("Age")
-tenure = st.number_input("Tenure")
-balance = st.number_input("Balance")
-
-# 🔽 THIS IS YOUR BLOCK (around line ~260-275)
-if st.button("Predict"):
-    model_input = {
-        "CreditScore": credit_score,
-        "Age": age,
-        "Tenure": tenure,
-        "Balance": balance
-    }
-
-    model_input_df = pd.DataFrame([model_input])
-
-    prediction = model.predict(model_input_df)
-
-    st.write("Prediction:", prediction)
-    # Basic features (MUST MATCH TRAINING)
-    row['CreditScore'] = credit_score
-    row['Age'] = age
-    row['Tenure'] = tenure
-    row['Balance'] = balance
-    row['NumOfProducts'] = num_products
-    row['HasCrCard'] = has_crcard
-    row['IsActiveMember'] = is_active
-    row['EstimatedSalary'] = estimated_salary
-
- 
-    row = df.iloc[0]
-    return row
 
     # Geography encoding
     row['France'] = 1 if geography == 'France' else 0
@@ -308,38 +276,88 @@ if st.button("Predict"):
     # Gender encoding
     row['Male'] = 1 if gender == 'Male' else 0
 
-    return row
-    # Numeric values
-    row['CreditScore'] = credit_score
-    row['Age'] = age
-    row['Tenure'] = tenure
-    row['Balance'] = balance
-    row['NumOfProducts'] = num_products
-    row['HasCrCard'] = has_crcard
-    row['IsActiveMember'] = is_active
-    row['EstimatedSalary'] = salary
+    # Derived features
+    b_s_ratio = balance / (estimated_salary + 1)
+
+    row['BalanceSalaryRatio'] = b_s_ratio
+    row['EngagementScore'] = engagement_score
 
     return pd.DataFrame([row])
-  
+# INPUTS
+credit_score = st.number_input("Credit Score")
+age = st.number_input("Age")
+tenure = st.number_input("Tenure")
+balance = st.number_input("Balance")
+num_products = st.number_input("Num Products")
+has_crcard = st.selectbox("Has Credit Card", [0, 1])
+is_active = st.selectbox("Is Active", [0, 1])
+estimated_salary = st.number_input("Salary")
+engagement_score = st.slider("Engagement Score", 0.0, 10.0)
 
+geography = st.selectbox("Geography", ["France", "Germany", "Spain"])
+gender = st.selectbox("Gender", ["Male", "Female"])
+
+if st.button("Predict"):
+
+    model_input_df = build_model_input(
+        geography,
+        gender,
+        credit_score,
+        age,
+        tenure,
+        balance,
+        num_products,
+        has_crcard,
+        is_active,
+        estimated_salary,
+        engagement_score,
+    )
+
+    prediction = model.predict(model_input_df)
+
+    st.write("Prediction:", prediction)
+    # Basic features (MUST MATCH TRAINING)
+  def build_model_input(
+    geography,
+    gender,
+    credit_score,
+    age,
+    tenure,
+    balance,
+    num_products,
+    has_crcard,
+    is_active,
+    estimated_salary,
+    engagement_score,
+):
+
+    # Basic features
+    row = {
+        'CreditScore': credit_score,
+        'Age': age,
+        'Tenure': tenure,
+        'Balance': balance,
+        'NumOfProducts': num_products,
+        'HasCrCard': has_crcard,
+        'IsActiveMember': is_active,
+        'EstimatedSalary': estimated_salary
+    }
+
+    # Geography encoding
+    row['France'] = 1 if geography == 'France' else 0
+    row['Germany'] = 1 if geography == 'Germany' else 0
+    row['Spain'] = 1 if geography == 'Spain' else 0
+
+    # Gender encoding
+    row['Male'] = 1 if gender == 'Male' else 0
+
+    # Derived features
     b_s_ratio = balance / (estimated_salary + 1)
-    scaled_score = credit_score / 850
-    scaled_age = age / 100
-    scaled_tenure = tenure / 10
-    scaled_balance = balance / 250000
-    scaled_salary = estimated_salary / 100000
-    engagement_pct = engagement_score * 10
-    bsr_pct = b_s_ratio * 100
 
-    _set_closest_bin('Scaled Score_', scaled_score, row)
-    _set_closest_bin('Scaled Age_', scaled_age, row)
-    _set_closest_bin('Scaled Tenure_', scaled_tenure, row)
-    _set_closest_bin('Scaled Balance _', scaled_balance, row)
-    _set_closest_bin('Scaled Salary_', scaled_salary, row)
-    _set_closest_bin('Engagement Score_', engagement_pct, row)
-    _set_closest_bin('Balance to Salary Ratio_', bsr_pct, row)
+    row['BalanceToSalaryRatio'] = b_s_ratio
+    row['EngagementScore'] = engagement_score
 
-    return row
+    return pd.DataFrame([row])
 
 
 def user_input_features():
