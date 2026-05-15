@@ -241,7 +241,6 @@ def _set_closest_bin(prefix: str, value: float, row: dict):
     for candidate in candidates:
         if _parse_numeric_bin(candidate, prefix) == best_value:
             row[candidate] = 1
-
 def build_model_input(
     geography,
     gender,
@@ -256,23 +255,29 @@ def build_model_input(
     engagement_score,
 ):
 
-    # ✔️ MATCH TRAINING EXACTLY
     row = {
-        'Scaled Score': credit_score / 850,
+        # ✔️ MATCH TRAINING FEATURES
+        'NumOfProducts': num_products,
+        'HasCrCard': has_crcard,
+        'IsActiveMember': is_active,
+
+        # ✔️ SCALED FEATURES (IMPORTANT)
         'Scaled Age': age / 100,
+        'Scaled Balance': balance / 250000,
+        'Scaled Score': credit_score / 850,
         'Scaled Tenure': tenure / 10,
-        'Scaled Balance': balance / 250000
     }
 
-    # ✔️ ONE-HOT ENCODING (MATCH TRAINING NAMES EXACTLY)
+    # ✔️ ONE HOT ENCODING (MATCH TRAINING EXACTLY)
     row['France'] = 1 if geography == 'France' else 0
     row['Germany'] = 1 if geography == 'Germany' else 0
     row['Spain'] = 1 if geography == 'Spain' else 0
 
-    # ✔️ GENDER (MATCH TRAINING)
+    # ✔️ GENDER
     row['Male'] = 1 if gender == 'Male' else 0
 
     return pd.DataFrame([row])
+
 
     # Derived feature
     b_s_ratio = balance / (estimated_salary + 1)
@@ -350,7 +355,6 @@ if st.button("Predict"):
     prediction = model.predict(model_input_df)
 
     st.write("Prediction:", prediction)
-
 
  
 # --- 2. Execution ---
