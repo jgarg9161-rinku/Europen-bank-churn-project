@@ -255,17 +255,15 @@ def build_model_input(
     estimated_salary,
     engagement_score,
 ):
-
-    row = {
-        'CreditScore': credit_score,
-        'Age': age,
-        'Tenure': tenure,
-        'Balance': balance,
-        'NumOfProducts': num_products,
-        'HasCrCard': has_crcard,
-        'IsActiveMember': is_active,
-        'EstimatedSalary': estimated_salary
+ row = {
+        'Scaled Score': credit_score / 850,
+        'Scaled Age': age / 100,
+        'Scaled Tenure': tenure / 10,
+        'Scaled Balance': balance / 250000,
     }
+
+    return pd.DataFrame([row])
+ 
 
     # Geography encoding
     row['France'] = 1 if geography == 'France' else 0
@@ -332,6 +330,8 @@ def user_input_features():
 
     return pd.DataFrame([summary]), model_input_df, geography, gender
 if st.button("Predict"):
+
+   if st.button("Predict"):
 
     model_input_df = build_model_input(
         geography,
