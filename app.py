@@ -487,34 +487,15 @@ with st.container():
     current_age_group = '18-25' if age <= 25 else '26-35' if age <= 35 else '36-45' if age <= 45 else '46-55' if age <= 55 else '56+'
     current_churn_rate = next((rate for group, rate in zip(historical_data['Age_Group'], historical_data['Avg_Churn_Rate']) if group == current_age_group), 15)
 
-    col1, col2 = st.columns(2)
+   col1, col2 = st.columns(2)
 
-    with col1:
-        # Churn rate comparison
-        fig = px.bar(
-            x=historical_data['Age_Group'],
-            y=historical_data['Avg_Churn_Rate'],
-            title="Churn Rate by Age Group",
-            labels={'x': 'Age Group', 'y': 'Churn Rate (%)'},
-            color=historical_data['Age_Group'],
-            color_discrete_map={current_age_group: '#1f77b4'}
-        )
-        fig.add_hline(y=current_churn_rate, line_dash="dash", line_color="red",
-                     annotation_text=f"Your group's avg: {current_churn_rate}%")
-        st.plotly_chart(fig, use_container_width=True)
+with col1:
+    st.subheader("Prediction Results")
+    st.write(prediction)
 
-    with col2:
-        # Risk factors analysis
-        risk_factors = {
-            'Factor': ['Low Credit Score', 'Low Balance', 'Few Products', 'Low Engagement', 'Short Tenure'],
-            'Impact': [0.3, 0.25, 0.2, 0.15, 0.1],
-            'Your_Status': [
-                'High Risk' if credit_score < 600 else 'Medium Risk' if credit_score < 700 else 'Low Risk',
-                'High Risk' if balance < 25000 else 'Medium Risk' if balance < 75000 else 'Low Risk',
-                'High Risk' if products == 1 else 'Medium Risk' if products == 2 else 'Low Risk',
-                'High Risk' if summary_df['Engagement Score'][0] < 3 else 'Medium Risk' if summary_df['Engagement Score'][0] < 7 else 'Low Risk',
-                'High Risk' if tenure < 2 else 'Medium Risk' if tenure < 5 else 'Low Risk'
-            ]
+with col2:
+    st.subheader("Input Summary")
+    st.write(model_input_df)
         }
 
         fig = px.scatter(
