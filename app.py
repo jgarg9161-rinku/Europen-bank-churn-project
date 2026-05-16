@@ -487,17 +487,17 @@ with st.container():
     current_age_group = '18-25' if age <= 25 else '26-35' if age <= 35 else '36-45' if age <= 45 else '46-55' if age <= 55 else '56+'
     current_churn_rate = next((rate for group, rate in zip(historical_data['Age_Group'], historical_data['Avg_Churn_Rate']) if group == current_age_group), 15)
 
-   col1, col2 = st.columns(2)
+  st.title("Bank Churn Prediction App")
 
-with col1:
-    st.subheader("Prediction Results")
+st.subheader("Prediction Results")
+
+if 'prediction' in locals():
     st.write(prediction)
 
-with col2:
-    st.subheader("Input Summary")
+if 'model_input_df' in locals():
+    st.subheader("Input Data")
     st.write(model_input_df)
-        }
-
+  
         fig = px.scatter(
             risk_factors,
             x='Factor',
