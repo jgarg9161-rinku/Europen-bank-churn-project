@@ -442,19 +442,18 @@ with tab2:
     age = summary_df['Age'][0]
     products = summary_df['NumOfProducts'][0]
     tenure = summary_df['Tenure'][0]
+  
+col1, col2, col3, col4 = st.columns(4)
 
-    col1, col2, col3, col4 = st.columns(4)
+with col1:
+    score_rating = "Excellent" if credit_score >= 750 else "Good" if credit_score >= 650 else "Fair"
+    st.metric("Credit Standing", score_rating, f"{credit_score}/850")
 
-  with col1:
-        score_rating = "Excellent" if credit_score >= 750 else "Good" if credit_score >= 650 else "Fair"
-        st.metric("Credit Standing", score_rating, f"{credit_score}/850")
+with col2:
+    balance_tier = "VIP" if balance > 150000 else "Premium" if balance > 100000 else "Standard" if balance > 25000 else "Basic"
+    st.metric("Account Tier", balance_tier, f"${balance:,.0f}")
 
-    with col2:
-        balance_tier = "VIP" if balance > 150000 else "Premium" if balance > 100000 else "Standard" if balance > 25000 else "Basic"
-        st.metric("Account Tier", balance_tier, f"${balance:,.0f}")
-
-with st.container():
-
+with col3:
     eng_score = summary_df.iloc[0]['Engagement Score']
 
     if eng_score > 7:
@@ -464,30 +463,40 @@ with st.container():
     else:
         engagement_level = "Low"
 
-    st.write("Engagement Level:", engagement_level)
-    with col4:
-        loyalty_score = min(100, (tenure * 10) + (products * 15) + (1 if summary_df['IsActiveMember'][0] else 0) * 20)
-        st.metric("Loyalty Score", f"{loyalty_score}%", f"{tenure} yrs tenure")
+    st.metric("Engagement Level", engagement_level)
 
-    # Customer Profile Radar Chart
-    st.subheader("Customer Profile Analysis")
-    radar_chart = create_customer_profile_chart(summary_df)
-    st.plotly_chart(radar_chart, use_container_width=True)
+with col4:
+    loyalty_score = min(
+        100,
+        (tenure * 10) +
+        (num_products * 15) +
+        (1 if summary_df['IsActiveMember'][0] else 0) * 20
+    )
 
-    # Historical comparison (simulated data)
-    st.subheader("📈 Historical Trends Comparison")
+    st.metric("Loyalty Score", f"{loyalty_score}%")
 
-    # Generate sample historical data for comparison
-    historical_data = {
-        'Age_Group': ['18-25', '26-35', '36-45', '46-55', '56+'],
-        'Avg_Churn_Rate': [25, 18, 15, 12, 8],
-        'Current_Profile': [age] * 5
-    }
+# ---------------- CLEAN SEPARATION ----------------
 
-    current_age_group = '18-25' if age <= 25 else '26-35' if age <= 35 else '36-45' if age <= 45 else '46-55' if age <= 55 else '56+'
-    current_churn_rate = next((rate for group, rate in zip(historical_data['Age_Group'], historical_data['Avg_Churn_Rate']) if group == current_age_group), 15)
+st.subheader("Customer Profile Analysis")
+radar_chart = create_customer_profile_chart(summary_df)
+st.plotly_chart(radar_chart, use_container_width=True)
 
-  st.title("Bank Churn Prediction App")
+st.subheader("📈 Historical Trends Comparison")
+
+historical_data = {
+    'Age_Group': ['18-25', '26-35', '36-45', '46-55', '56+'],
+    'Avg_Churn_Rate': [25, 18, 15, 12, 8]
+}
+
+current_age_group = (
+    '18-25' if age <= 25 else
+    '26-35' if age <= 35 else
+    '36-45' if age <= 45 else
+    '46-55' if age <= 55 else
+    '56+'
+)
+
+st.title("Bank Churn Prediction App")
 
 st.subheader("Prediction Results")
 
@@ -497,7 +506,6 @@ if 'prediction' in locals():
 if 'model_input_df' in locals():
     st.subheader("Input Data")
     st.write(model_input_df)
-  
         fig = px.scatter(
             risk_factors,
             x='Factor',
