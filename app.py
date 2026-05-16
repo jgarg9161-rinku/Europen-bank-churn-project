@@ -252,22 +252,20 @@ def build_model_input(
     engagement_score,
 ):
 
+    # ✅ CREATE FEATURES EXACTLY LIKE TRAINING
     row = {
-        # ✅ EXACT SAME AS TRAINING
         'Scaled Score': credit_score / 850,
         'Scaled Age': age / 100,
         'Scaled Balance': balance / 250000,
         'Scaled Tenure': tenure / 10,
 
-        'France': 1 if geography == 'France' else 0,
-        'Germany': 1 if geography == 'Germany' else 0,
-        'Spain': 1 if geography == 'Spain' else 0,
-
-        'Male': 1 if gender == 'Male' else 0,
+        'Age Tenure': age * tenure,
+        'Balance to Salary ratio': balance / (estimated_salary + 1),
+        'Product to tenure ratio': num_products / (tenure + 1),
+        'Engagement Score': engagement_score,
     }
 
     return pd.DataFrame([row])
-
     # Derived feature
     b_s_ratio = balance / (estimated_salary + 1)
 
@@ -342,7 +340,7 @@ if st.button("Predict"):
     )
 
     prediction = model.predict(model_input_df)
-
+model_input_df = model_input_df.reindex(columns=model.feature_names_in_, fill_value=0)
     st.write("Prediction:", prediction)
  
 # --- 2. Execution ---
