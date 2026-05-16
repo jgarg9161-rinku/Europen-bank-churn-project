@@ -506,16 +506,26 @@ if 'prediction' in locals():
 if 'model_input_df' in locals():
     st.subheader("Input Data")
     st.write(model_input_df)
-        fig = px.scatter(
-            risk_factors,
-            x='Factor',
-            y='Impact',
-            size='Impact',
-            color='Your_Status',
-            title="Risk Factor Analysis",
-            color_discrete_map={'Low Risk': '#388e3c', 'Medium Risk': '#f57c00', 'High Risk': '#d32f2f'}
-        )
-        st.plotly_chart(fig, use_container_width=True)
+
+# ---------------- SAFE SEPARATION ----------------
+
+if 'risk_factors' in locals():
+
+    fig = px.scatter(
+        risk_factors,
+        x='Factor',
+        y='Impact',
+        size='Impact',
+        color='Your_Status',
+        title="Risk Factor Analysis",
+        color_discrete_map={
+            'Low Risk': '#388e3c',
+            'Medium Risk': '#f57c00',
+            'High Risk': '#d32f2f'
+        }
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
 
 with tab3:
     st.markdown("### 👥 Customer Insights & Segmentation")
