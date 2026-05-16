@@ -1,4 +1,5 @@
 import streamlit as st
+import pickle
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -56,14 +57,13 @@ else:
     from sklearn.dummy import DummyClassifier
     model = DummyClassifier(strategy="most_frequent")
     model.fit([[0]*8], [0])
+  model_features = X.columns.tolist()
 y = df.iloc[:, 0]
 
 model = RandomForestClassifier()
 model.fit(X, y)
 # 1. Page Configuration
-st.set_page_config(
-    page_title="Bank Churn Predictor Pro",
-    layout="wide",
+st.set_page_config(page_title="Bank Churn Prediction", layout="wide")
     page_icon="🏦",
     initial_sidebar_state="expanded"
 )
@@ -256,18 +256,15 @@ def build_model_input(
 ):
 
     row = {
-        # ✔️ MATCH TRAINING (SCALED FEATURES)
-        'Scaled Score': credit_score / 850,
-        'Scaled Age': age / 100,
-        'Scaled Balance': balance / 250000,
-        'Scaled Tenure': tenure / 10,
-
-        # ✔️ ENCODING MUST MATCH TRAINING
-        'France': 1 if geography == 'France' else 0,
-        'Germany': 1 if geography == 'Germany' else 0,
-        'Spain': 1 if geography == 'Spain' else 0,
-
-        'Male': 1 if gender == 'Male' else 0
+        # MATCH TRAINING (ONLY USE WHAT MODEL USED)
+        'CreditScore': credit_score,
+        'Age': age,
+        'Tenure': tenure,
+        'Balance': balance,
+        'NumOfProducts': num_products,
+        'HasCrCard': has_crcard,
+        'IsActiveMember': is_active,
+        'EstimatedSalary': estimated_salary,
     }
 
     return pd.DataFrame([row])
