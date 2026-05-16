@@ -467,12 +467,11 @@ with col3:
 
 with col4:
     loyalty_score = min(
-        100,
-        (tenure * 10) +
-        (num_products * 15) +
-        (1 if summary_df['IsActiveMember'][0] else 0) * 20
-    )
-
+    100,
+    (tenure * 10) +
+    (summary_df.iloc[0]['NumOfProducts'] * 15) +
+    (1 if summary_df.iloc[0]['IsActiveMember'] else 0) * 20
+)
     st.metric("Loyalty Score", f"{loyalty_score}%")
 
 # ---------------- CLEAN SEPARATION ----------------
