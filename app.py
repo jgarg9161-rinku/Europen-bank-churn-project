@@ -253,15 +253,17 @@ def build_model_input(
 ):
 
     row = {
-        # MATCH TRAINING (ONLY USE WHAT MODEL USED)
-        'CreditScore': credit_score,
-        'Age': age,
-        'Tenure': tenure,
-        'Balance': balance,
-        'NumOfProducts': num_products,
-        'HasCrCard': has_crcard,
-        'IsActiveMember': is_active,
-        'EstimatedSalary': estimated_salary,
+        # ✅ EXACT SAME AS TRAINING
+        'Scaled Score': credit_score / 850,
+        'Scaled Age': age / 100,
+        'Scaled Balance': balance / 250000,
+        'Scaled Tenure': tenure / 10,
+
+        'France': 1 if geography == 'France' else 0,
+        'Germany': 1 if geography == 'Germany' else 0,
+        'Spain': 1 if geography == 'Spain' else 0,
+
+        'Male': 1 if gender == 'Male' else 0,
     }
 
     return pd.DataFrame([row])
@@ -338,8 +340,6 @@ if st.button("Predict"):
         estimated_salary,
         engagement_score
     )
-
-    model_input_df = model_input_df.reindex(columns=model_features, fill_value=0)
 
     prediction = model.predict(model_input_df)
 
