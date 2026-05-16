@@ -257,18 +257,25 @@ def build_model_input(
 ):
 
     row = {
-        # ✔️ MUST MATCH TRAINING FEATURES
-        'Scaled Score': credit_score / 850,
-        'Scaled Age': age / 100,
-        'Scaled Balance': balance / 250000,
-        'Scaled Tenure': tenure / 10,
+        # 🔥 MUST FIX NumOfProducts ERROR
+        'NumOfProducts': num_products,
+        'HasCrCard': has_crcard,
+        'IsActiveMember': is_active,
 
-        # ✔️ CATEGORICAL FEATURES (MATCH EXACT TRAINING NAMES)
+        # BASIC FEATURES
+        'CreditScore': credit_score,
+        'Age': age,
+        'Tenure': tenure,
+        'Balance': balance,
+        'EstimatedSalary': estimated_salary,
+
+        # GEOGRAPHY (FIX FOR Germany ERROR)
         'France': 1 if geography == 'France' else 0,
         'Germany': 1 if geography == 'Germany' else 0,
         'Spain': 1 if geography == 'Spain' else 0,
 
-        'Male': 1 if gender == 'Male' else 0,
+        # GENDER
+        'Male': 1 if gender == 'Male' else 0
     }
 
     return pd.DataFrame([row])
@@ -343,13 +350,15 @@ if st.button("Predict"):
         has_crcard,
         is_active,
         estimated_salary,
-        engagement_score,
+        engagement_score
     )
+
+    # 🔥 IMPORTANT FIX LINE (THIS SOLVES ALL ERRORS)
+    model_input_df = model_input_df.reindex(columns=model_features, fill_value=0)
 
     prediction = model.predict(model_input_df)
 
     st.write("Prediction:", prediction)
-
  
 # --- 2. Execution ---
 summary_df, model_input_df, geo_val, gen_val = user_input_features()
@@ -436,7 +445,7 @@ with tab2:
 
     col1, col2, col3, col4 = st.columns(4)
 
-    with col1:
+  with col1:
         score_rating = "Excellent" if credit_score >= 750 else "Good" if credit_score >= 650 else "Fair"
         st.metric("Credit Standing", score_rating, f"{credit_score}/850")
 
