@@ -324,7 +324,6 @@ def user_input_features():
     return pd.DataFrame([summary]), model_input_df, geography, gender
 
 if st.button("Predict"):
-
     model_input_df = build_model_input(
         geography,
         gender,
@@ -339,10 +338,12 @@ if st.button("Predict"):
         engagement_score
     )
 
+    model_input_df = model_input_df.reindex(columns=model.feature_names_in_, fill_value=0)
+
     prediction = model.predict(model_input_df)
-model_input_df = model_input_df.reindex(columns=model.feature_names_in_, fill_value=0)
+
     st.write("Prediction:", prediction)
- 
+  
 # --- 2. Execution ---
 summary_df, model_input_df, geo_val, gen_val = user_input_features()
 
