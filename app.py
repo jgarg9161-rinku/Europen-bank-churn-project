@@ -241,7 +241,6 @@ def _set_closest_bin(prefix: str, value: float, row: dict):
     for candidate in candidates:
         if _parse_numeric_bin(candidate, prefix) == best_value:
             row[candidate] = 1
-
 def build_model_input(
     geography,
     gender,
@@ -257,24 +256,17 @@ def build_model_input(
 ):
 
     row = {
-        # 🔥 MUST FIX NumOfProducts ERROR
-        'NumOfProducts': num_products,
-        'HasCrCard': has_crcard,
-        'IsActiveMember': is_active,
+        # ✔️ MATCH TRAINING (SCALED FEATURES)
+        'Scaled Score': credit_score / 850,
+        'Scaled Age': age / 100,
+        'Scaled Balance': balance / 250000,
+        'Scaled Tenure': tenure / 10,
 
-        # BASIC FEATURES
-        'CreditScore': credit_score,
-        'Age': age,
-        'Tenure': tenure,
-        'Balance': balance,
-        'EstimatedSalary': estimated_salary,
-
-        # GEOGRAPHY (FIX FOR Germany ERROR)
+        # ✔️ ENCODING MUST MATCH TRAINING
         'France': 1 if geography == 'France' else 0,
         'Germany': 1 if geography == 'Germany' else 0,
         'Spain': 1 if geography == 'Spain' else 0,
 
-        # GENDER
         'Male': 1 if gender == 'Male' else 0
     }
 
@@ -353,7 +345,6 @@ if st.button("Predict"):
         engagement_score
     )
 
-    # 🔥 IMPORTANT FIX LINE (THIS SOLVES ALL ERRORS)
     model_input_df = model_input_df.reindex(columns=model_features, fill_value=0)
 
     prediction = model.predict(model_input_df)
