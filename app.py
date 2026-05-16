@@ -33,31 +33,25 @@ except:
 if not df.empty:
     df.columns = df.columns.str.strip()
 
-    # Convert all values to numeric
     df = df.apply(pd.to_numeric, errors='coerce')
     df.fillna(0, inplace=True)
 
-    # ==============================
-    # STEP 3: Select Features SAFELY
-    # ==============================
-    y = df.iloc[:, 0]      # target column
-    X = df.iloc[:, 1:9]    # next 8 columns (safe)
+    y = df.iloc[:, 0]
+    X = df.iloc[:, 1:9]
 
-    # ==============================
-    # STEP 4: Train Model
-    # ==============================
-    from sklearn.ensemble import RandomForestClassifier
     model = RandomForestClassifier()
     model.fit(X, y)
 
+    # ✅ FIXED POSITION (IMPORTANT)
+    model_features = X.columns.tolist()
+
 else:
-    # ==============================
-    # STEP 5: Fallback Model (NO ERROR)
-    # ==============================
     from sklearn.dummy import DummyClassifier
     model = DummyClassifier(strategy="most_frequent")
     model.fit([[0]*8], [0])
-  model_features = X.columns.tolist()
+
+    # ✅ ALSO ADD HERE (VERY IMPORTANT)
+    model_features = [f"feature_{i}" for i in range(8)]
 y = df.iloc[:, 0]
 
 model = RandomForestClassifier()
