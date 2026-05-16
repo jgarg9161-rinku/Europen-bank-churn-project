@@ -57,10 +57,13 @@ y = df.iloc[:, 0]
 model = RandomForestClassifier()
 model.fit(X, y)
 # 1. Page Configuration
-st.set_page_config(page_title="Bank Churn Prediction", layout="wide")
+st.set_page_config(
+    page_title="Bank Churn Prediction",
     page_icon="🏦",
+    layout="wide",
     initial_sidebar_state="expanded"
 )
+
 
 # Custom CSS for better styling
 st.markdown("""
